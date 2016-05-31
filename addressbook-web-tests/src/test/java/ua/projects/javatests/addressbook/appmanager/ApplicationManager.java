@@ -24,6 +24,9 @@ public class ApplicationManager {
         sessionHelper.login("admin", "secret");
     }
 
+    public void alertAccept() {
+        wd.switchTo().alert().accept();
+    }
 
     public void stop() {
         wd.quit();
