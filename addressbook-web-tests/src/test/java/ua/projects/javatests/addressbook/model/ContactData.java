@@ -1,4 +1,4 @@
-package ua.projects.javatests.addressbook;
+package ua.projects.javatests.addressbook.model;
 
 public class ContactData {
     private final String firstName;
