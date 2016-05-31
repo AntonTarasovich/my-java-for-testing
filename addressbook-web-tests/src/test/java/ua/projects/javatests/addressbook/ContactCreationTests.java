@@ -19,7 +19,7 @@ public class ContactCreationTests {
     }
     
     @Test
-    public void ContactCreationTests() {
+    public void testContactCreation() {
         login("admin", "secret");
         newContactCreation();
         fillContactForm(new ContactData("Anton", "Tarasovich", "Hammer", "MGID", "555-55-55", "anton.tarasovich@mgid.com"));
