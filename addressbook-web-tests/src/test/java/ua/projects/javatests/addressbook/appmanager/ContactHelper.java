@@ -18,15 +18,6 @@ public class ContactHelper extends HelperBase {
     }
 
     public void fillContactForm(ContactData contactData, boolean creation) {
-        //boolean flag = false;
-        //do {
-            type(By.name("firstname"), contactData.getFirstName());
-            type(By.name("lastname"), contactData.getLastName());
-            type(By.name("nickname"), contactData.getNickname());
-            type(By.name("company"), contactData.getWorkPlace());
-            type(By.name("home"), contactData.getTelephoneNumber());
-            type(By.name("email"), contactData.getEmail());
-
             if (creation) {
                 click(By.name("new_group"));
                     if (wd.findElements(By.cssSelector("select[name=new_group] option")).size() > 1) {
@@ -48,6 +39,12 @@ public class ContactHelper extends HelperBase {
             } else {
                 Assert.assertFalse(isElementPresent(By.name("new_group")));
             }
+        type(By.name("firstname"), contactData.getFirstName());
+        type(By.name("lastname"), contactData.getLastName());
+        type(By.name("nickname"), contactData.getNickname());
+        type(By.name("company"), contactData.getWorkPlace());
+        type(By.name("home"), contactData.getTelephoneNumber());
+        type(By.name("email"), contactData.getEmail());
     }
 
     public void newContactCreation() {
@@ -74,8 +71,8 @@ public class ContactHelper extends HelperBase {
         return isElementPresent(By.name("selected[]"));
     }
 
-    public void createContact(ContactData contact, boolean b) {
-        fillContactForm(contact, b);
+    public void createContact(ContactData contact) {
+        fillContactForm(contact, true);
         submitNewContact();
         NavigationHelper nh = new NavigationHelper(wd);
         nh.returnToHomePage();
