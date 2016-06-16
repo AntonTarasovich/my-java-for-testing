@@ -63,8 +63,8 @@ public class ContactHelper extends HelperBase {
         click(By.cssSelector(".left>input[value='Delete']"));
     }
 
-    public void initContactModification() {
-        click(By.cssSelector(".center>a>img[title='Edit']"));
+    public void initContactModification(int index) {
+        wd.findElements(By.cssSelector(".center>a>img[title='Edit']")).get(index).click();
     }
 
     public void submitContactModification() {
@@ -91,9 +91,10 @@ public class ContactHelper extends HelperBase {
         List<WebElement> rows = wd.findElements(By.name("entry"));
         for (WebElement row : rows) {
             List <WebElement> cells = row.findElements(By.tagName("td"));
-            String firstName = cells.get(1).getText();
-            String secondName = cells.get(0).getText();
-            ContactData contact = new ContactData(firstName, secondName, null, null, null, null, null);
+            String firstName = cells.get(2).getText();
+            String secondName = cells.get(1).getText();
+            int id = Integer.parseInt(row.findElement(By.tagName("input")).getAttribute("value"));
+            ContactData contact = new ContactData(id, firstName, secondName, null, null, null, null, null);
             contacts.add(contact);
         }
         return contacts;
