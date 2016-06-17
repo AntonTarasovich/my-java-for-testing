@@ -13,6 +13,8 @@ import java.util.List;
 
 public class ContactHelper extends HelperBase {
 
+    NavigationHelper nh = new NavigationHelper(wd);
+
     public ContactHelper(WebDriver wd) {
         super(wd);
     }
@@ -35,8 +37,8 @@ public class ContactHelper extends HelperBase {
                 } else {
                     GroupHelper gh = new GroupHelper(wd);
                     NavigationHelper nh = new NavigationHelper(wd);
-                    nh.goToGroupPage();
-                    gh.createGroup(new GroupData("test1", null, null));
+                    nh.groupPage();
+                    gh.create(new GroupData("test1", null, null));
                     click(By.linkText("add new"));
                     type(By.name("firstname"), contactData.getFirstName());
                     type(By.name("lastname"), contactData.getLastName());
@@ -75,10 +77,24 @@ public class ContactHelper extends HelperBase {
         return isElementPresent(By.name("selected[]"));
     }
 
-    public void createContact(ContactData contact) {
+    public void create(ContactData contact) {
+        newContactCreation();
         fillContactForm(contact, true);
         submitNewContact();
-        NavigationHelper nh = new NavigationHelper(wd);
+        nh.returnToHomePage();
+    }
+
+
+    public void delete(int index) {
+        selectContact(index);
+        deleteSelectedContact();
+    }
+
+    public void modify(int index, ContactData contact) {
+        selectContact(index);
+        initContactModification(index);
+        fillContactForm(contact, false);
+        submitContactModification();
         nh.returnToHomePage();
     }
 
@@ -86,7 +102,7 @@ public class ContactHelper extends HelperBase {
         return wd.findElements(By.name("selected[]")).size();
     }
 
-    public List<ContactData> getContactList() {
+    public List<ContactData> list() {
         List<ContactData> contacts = new ArrayList<ContactData>();
         List<WebElement> rows = wd.findElements(By.name("entry"));
         for (WebElement row : rows) {
