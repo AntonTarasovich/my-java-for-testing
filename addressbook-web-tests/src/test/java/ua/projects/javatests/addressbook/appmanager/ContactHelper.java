@@ -38,7 +38,7 @@ public class ContactHelper extends HelperBase {
                     GroupHelper gh = new GroupHelper(wd);
                     NavigationHelper nh = new NavigationHelper(wd);
                     nh.groupPage();
-                    gh.create(new GroupData("test1", null, null));
+                    gh.create(new GroupData().withName("test1"));
                     click(By.linkText("add new"));
                     type(By.name("firstname"), contactData.getFirstName());
                     type(By.name("lastname"), contactData.getLastName());
@@ -108,10 +108,9 @@ public class ContactHelper extends HelperBase {
         for (WebElement row : rows) {
             List <WebElement> cells = row.findElements(By.tagName("td"));
             String firstName = cells.get(2).getText();
-            String secondName = cells.get(1).getText();
+            String lastName = cells.get(1).getText();
             int id = Integer.parseInt(row.findElement(By.tagName("input")).getAttribute("value"));
-            ContactData contact = new ContactData(id, firstName, secondName, null, null, null, null, null);
-            contacts.add(contact);
+            contacts.add(new ContactData().withId(id).withFirstName(firstName).withLastName(lastName));
         }
         return contacts;
     }
