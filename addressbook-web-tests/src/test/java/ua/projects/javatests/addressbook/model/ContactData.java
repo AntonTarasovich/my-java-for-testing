@@ -1,12 +1,14 @@
 package ua.projects.javatests.addressbook.model;
 
 public class ContactData {
-    private int id  = Integer.MAX_VALUE;
+    private int id;
     private String firstName;
     private String lastName;
     private String nickname;
     private String workPlace;
-    private String telephoneNumber;
+    private String homePhone;
+    private String mobilePhone;
+    private String workPhone;
     private String email;
     private String group;
 
@@ -30,8 +32,16 @@ public class ContactData {
         return workPlace;
     }
 
-    public String getTelephoneNumber() {
-        return telephoneNumber;
+    public String getHomePhone() {
+        return homePhone;
+    }
+
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public String getWorkPhone() {
+        return workPhone;
     }
 
     public String getEmail() {
@@ -67,8 +77,18 @@ public class ContactData {
         return this;
     }
 
-    public ContactData withTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber;
+    public ContactData withHomePhone(String homePhone) {
+        this.homePhone = homePhone;
+        return this;
+    }
+
+    public ContactData withMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
+        return this;
+    }
+
+    public ContactData withWorkPhone(String workPhone) {
+        this.workPhone = workPhone;
         return this;
     }
 

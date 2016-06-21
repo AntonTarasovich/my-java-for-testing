@@ -28,7 +28,9 @@ public class ContactHelper extends HelperBase {
         type(By.name("lastname"), contactData.getLastName());
         type(By.name("nickname"), contactData.getNickname());
         type(By.name("company"), contactData.getWorkPlace());
-        type(By.name("home"), contactData.getTelephoneNumber());
+        type(By.name("home"), contactData.getHomePhone());
+        type(By.name("mobile"), contactData.getMobilePhone());
+        type(By.name("work"), contactData.getWorkPhone());
         type(By.name("email"), contactData.getEmail());
             if (creation) {
                 click(By.name("new_group"));
@@ -44,7 +46,9 @@ public class ContactHelper extends HelperBase {
                     type(By.name("lastname"), contactData.getLastName());
                     type(By.name("nickname"), contactData.getNickname());
                     type(By.name("company"), contactData.getWorkPlace());
-                    type(By.name("home"), contactData.getTelephoneNumber());
+                    type(By.name("home"), contactData.getHomePhone());
+                    type(By.name("mobile"), contactData.getMobilePhone());
+                    type(By.name("work"), contactData.getWorkPhone());
                     type(By.name("email"), contactData.getEmail());
                 }
                 new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
@@ -65,7 +69,7 @@ public class ContactHelper extends HelperBase {
         click(By.cssSelector(".left>input[value='Delete']"));
     }
 
-    public void initContactModification(int id) {
+    public void initContactModificationById(int id) {
         wd.findElement(By.cssSelector("a[href='edit.php?id=" + id + "']")).click();
     }
 
@@ -81,7 +85,7 @@ public class ContactHelper extends HelperBase {
         newContactCreation();
         fillContactForm(contact, true);
         submitNewContact();
-        nh.returnToHomePage();
+        nh.goToHomePage();
     }
 
     public void delete(ContactData contact) {
@@ -92,13 +96,13 @@ public class ContactHelper extends HelperBase {
 
     public void modify(ContactData contact) {
         selectContactById(contact.getId());
-        initContactModification(contact.getId());
+        initContactModificationById(contact.getId());
         fillContactForm(contact, false);
         submitContactModification();
-        nh.returnToHomePage();
+        nh.goToHomePage();
     }
 
-    public int getContactCount() {
+    public int count() {
         return wd.findElements(By.name("selected[]")).size();
     }
 
@@ -115,4 +119,14 @@ public class ContactHelper extends HelperBase {
         return contacts;
     }
 
+    public ContactData infoFromEditForm(ContactData contact) {
+        initContactModificationById(contact.getId());
+        String firstName = wd.findElement(By.name("firstname")).getAttribute("value");
+        String lastName = wd.findElement(By.name("lastname")).getAttribute("value");
+        String homePhone = wd.findElement(By.name("home")).getAttribute("value");
+        String mobilePhone = wd.findElement(By.name("mobile")).getAttribute("value");
+        String workPhone = wd.findElement(By.name("work")).getAttribute("value");
+        return new ContactData().withId(contact.getId()).withFirstName(firstName).withLastName(lastName).withHomePhone(homePhone)
+                .withMobilePhone(mobilePhone).withWorkPhone(workPhone);
+    }
 }
