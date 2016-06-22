@@ -4,6 +4,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ua.projects.javatests.addressbook.model.ContactData;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -25,15 +28,21 @@ public class ContactPhoneTest extends TestBase{
         ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(contact);
 
         assertThat(contact.getAddress(), equalTo(contactInfoFromEditForm.getAddress()));
-        assertThat(contact.getHomePhone(), equalTo(cleaned(contactInfoFromEditForm.getHomePhone())));
-        assertThat(contact.getMobilePhone(), equalTo(cleaned(contactInfoFromEditForm.getMobilePhone())));
-        assertThat(contact.getWorkPhone(), equalTo(cleaned(contactInfoFromEditForm.getWorkPhone())));
-        assertThat(contact.getFirstEmail(), equalTo(contactInfoFromEditForm.getFirstEmail()));
-        assertThat(contact.getSecondEmail(), equalTo(contactInfoFromEditForm.getSecondEmail()));
-        assertThat(contact.getThirdEmail(), equalTo(contactInfoFromEditForm.getThirdEmail()));
+        assertThat(contact.getAllPhones(), equalTo(mergePhones(contactInfoFromEditForm)));
+        assertThat(contact.getAllEmais(), equalTo(mergeEmails(contactInfoFromEditForm)));
     }
 
-    public String cleaned(String phone) {
+    private String mergeEmails(ContactData contact) {
+        return Arrays.asList(contact.getFirstEmail(), contact.getSecondEmail(), contact.getThirdEmail()).stream().filter((s) -> ! s.equals(""))
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String mergePhones(ContactData contact) {
+        return Arrays.asList(contact.getHomePhone(), contact.getMobilePhone(), contact.getWorkPhone()).stream().filter((s) -> ! s.equals(""))
+                .map(ContactPhoneTest::cleaned).collect(Collectors.joining("\n"));
+    }
+
+    public static String cleaned(String phone) {
         return phone.replaceAll("\\s", "").replaceAll("[-()]", "");
     }
 }
