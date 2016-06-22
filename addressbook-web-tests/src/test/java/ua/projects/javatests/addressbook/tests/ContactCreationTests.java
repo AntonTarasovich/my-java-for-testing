@@ -9,11 +9,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactCreationTests extends TestBase {
     
-    @Test
+    @Test (priority = 1)
     public void testContactCreation() {
         Contacts before = app.contact().all();
         ContactData contact = new ContactData().withFirstName("Anton").withLastName("Tarasovich").withNickname("Hammer").withWorkPlace("MGID")
-                .withHomePhone("111-11-11").withMobilePhone("222-22-22").withWorkPhone("333-33-33").withEmail("anton.tarasovich@mgid.com").withGroup("test1");
+                .withAddress("Kiev, Dovzhenko str. 3, app. 21").withHomePhone("111-11-11").withMobilePhone("222-22-22").withWorkPhone("333-33-33")
+                .withFirstEmail("anton.tarasovich@mgid.com").withSecondEmail("vasya111@mail.ru").withThirdEmail("petya72@meta.ua").withGroup("test1");
         app.contact().create(contact);
         assertThat(app.contact().count(), equalTo(before.size() + 1));
         Contacts after = app.contact().all();
@@ -21,7 +22,7 @@ public class ContactCreationTests extends TestBase {
         assertThat(after, equalTo(before.withAdded(contact.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
     }
 
-    @Test
+    @Test (priority = 2)
     public void testBsdContactCreation() {
         Contacts before = app.contact().all();
         ContactData contact = new ContactData().withFirstName("Anton'");
