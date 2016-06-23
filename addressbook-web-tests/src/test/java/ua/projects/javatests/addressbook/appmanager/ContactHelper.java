@@ -76,7 +76,7 @@ public class ContactHelper extends HelperBase {
     }
 
     public void initContactModificationById(int id) {
-        wd.findElement(By.cssSelector("a[href='edit.php?id=" + id + "']")).click();
+        click(By.cssSelector("a[href='edit.php?id=" + id + "']"));
     }
 
     public void submitContactModification() {
@@ -133,6 +133,8 @@ public class ContactHelper extends HelperBase {
         initContactModificationById(contact.getId());
         String firstName = wd.findElement(By.name("firstname")).getAttribute("value");
         String lastName = wd.findElement(By.name("lastname")).getAttribute("value");
+        String nickName = wd.findElement(By.name("nickname")).getAttribute("value");
+        String workPlace = wd.findElement(By.name("company")).getAttribute("value");
         String address = wd.findElement(By.name("address")).getAttribute("value");
         String homePhone = wd.findElement(By.name("home")).getAttribute("value");
         String mobilePhone = wd.findElement(By.name("mobile")).getAttribute("value");
@@ -140,7 +142,14 @@ public class ContactHelper extends HelperBase {
         String firstEmail = wd.findElement(By.name("email")).getAttribute("value");
         String secondEmail = wd.findElement(By.name("email2")).getAttribute("value");
         String thirdEmail = wd.findElement(By.name("email3")).getAttribute("value");
-        return new ContactData().withId(contact.getId()).withFirstName(firstName).withLastName(lastName).withAddress(address).withHomePhone(homePhone)
-                .withMobilePhone(mobilePhone).withWorkPhone(workPhone).withFirstEmail(firstEmail).withSecondEmail(secondEmail).withThirdEmail(thirdEmail);
+        return new ContactData().withId(contact.getId()).withFirstName(firstName).withLastName(lastName).withNickname(nickName).withWorkPlace(workPlace)
+                .withAddress(address).withHomePhone(homePhone).withMobilePhone(mobilePhone).withWorkPhone(workPhone).withFirstEmail(firstEmail)
+                .withSecondEmail(secondEmail).withThirdEmail(thirdEmail);
+    }
+
+    public ContactData detailedInfoForm(ContactData contact) {
+        nh.goToDetailedInfoPage(contact.getId());
+        String info = wd.findElement(By.id("content")).getText();
+        return new ContactData().withInfo(info);
     }
 }

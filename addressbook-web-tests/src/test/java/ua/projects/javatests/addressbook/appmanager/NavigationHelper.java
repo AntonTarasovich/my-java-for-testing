@@ -2,6 +2,7 @@ package ua.projects.javatests.addressbook.appmanager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import ua.projects.javatests.addressbook.model.ContactData;
 
 public class NavigationHelper extends HelperBase {
 
@@ -24,4 +25,10 @@ public class NavigationHelper extends HelperBase {
         click(By.linkText("groups"));
     }
 
+    public void goToDetailedInfoPage(int id) {
+        if (isElementPresent(By.name("print"))) {
+            return;
+        }
+        click(By.cssSelector("a[href='view.php?id=" + id + "']"));
+    }
 }

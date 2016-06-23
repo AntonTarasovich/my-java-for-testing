@@ -16,6 +16,7 @@ public class ContactData {
     private String secondEmail;
     private String thirdEmail;
     private String group;
+    private String info;
 
     public int getId() {
         return id;
@@ -75,6 +76,10 @@ public class ContactData {
 
     public String getGroup() {
         return group;
+    }
+
+    public String getInfo() {
+        return info;
     }
 
     public ContactData withId(int id) {
@@ -149,6 +154,11 @@ public class ContactData {
 
     public ContactData withGroup(String group) {
         this.group = group;
+        return this;
+    }
+
+    public ContactData withInfo(String info) {
+        this.info = info;
         return this;
     }
 
