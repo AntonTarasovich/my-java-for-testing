@@ -35,6 +35,7 @@ public class ContactHelper extends HelperBase {
         type(By.name("email"), contactData.getFirstEmail());
         type(By.name("email2"), contactData.getSecondEmail());
         type(By.name("email3"), contactData.getThirdEmail());
+        attach(By.name("photo"), contactData.getPhoto());
             if (creation) {
                 click(By.name("new_group"));
                     if (wd.findElements(By.cssSelector("select[name=new_group] option")).size() > 1) {
@@ -56,6 +57,7 @@ public class ContactHelper extends HelperBase {
                     type(By.name("email"), contactData.getFirstEmail());
                     type(By.name("email2"), contactData.getSecondEmail());
                     type(By.name("email3"), contactData.getThirdEmail());
+                    attach(By.name("photo"), contactData.getPhoto());
                 }
                 new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
             } else {
@@ -149,7 +151,16 @@ public class ContactHelper extends HelperBase {
 
     public ContactData detailedInfoForm(ContactData contact) {
         nh.goToDetailedInfoPage(contact.getId());
-        String info = wd.findElement(By.id("content")).getText();
-        return new ContactData().withInfo(info);
+        String info = wd.findElement(By.id("content")).getText().replaceAll("\n", "").replaceAll("[\\s]{2,}", " ");
+        return contact.withInfo(info);
+    }
+
+    public boolean isPhotoExist() {
+        return isElementPresent(By.cssSelector("img[alt='Embedded Image']"));
+    }
+
+    public int maxId() {
+        Contacts contacts = all();
+        return contacts.stream().mapToInt((g) -> g.getId()).max().getAsInt();
     }
 }

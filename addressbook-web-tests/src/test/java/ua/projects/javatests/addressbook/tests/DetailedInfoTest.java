@@ -3,12 +3,16 @@ package ua.projects.javatests.addressbook.tests;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ua.projects.javatests.addressbook.model.ContactData;
+import ua.projects.javatests.addressbook.model.Contacts;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.testng.Assert;
 
 public class DetailedInfoTest extends TestBase {
 
@@ -33,39 +37,61 @@ public class DetailedInfoTest extends TestBase {
         assertThat(contactDetailedInfoForm.getInfo(), equalTo(mergeInfo(contactInfoFromEditForm)));
     }
 
+    @Test
+    public void testPhotoInDetailedInfo() {
+        File photo = new File("src/test/resources/batman.jpg");
+        ContactData contact = new ContactData().withFirstName("Anton").withPhoto(photo);
+        app.goTo().goToHomePage();
+        Contacts before = app.contact().all();
+        app.contact().create(contact);
+        app.goTo().goToDetailedInfoPage(app.contact().maxId());
+        Assert.assertEquals(app.contact().isPhotoExist(), true);
+        app.goTo().goToHomePage();
+        app.contact().delete(contact.withId(app.contact().maxId()));
+        app.alertAccept();
+        app.goTo().goToHomePage();
+        Contacts after = app.contact().all();
+
+        assertThat(after, equalTo(before));
+    }
+
     public static String mergeInfo(ContactData contact) {
         String info = Arrays.asList(contact.getFirstName() + " " + contact.getLastName(), contact.getNickname(), contact.getWorkPlace(), contact.getAddress(), "",
                 phoneWithHomePrefix(contact.getHomePhone()), phoneWithMobilePrefix(contact.getMobilePhone()), phoneWithWorkPrefix(contact.getWorkPhone()), "",
                 emailWithDomain(contact.getFirstEmail()), emailWithDomain(contact.getSecondEmail()), emailWithDomain(contact.getThirdEmail())).stream()
-                .filter((s) -> ! s.equals(" ")).collect(Collectors.joining("\n"));
+                .filter((s) -> ! s.equals("")).filter((s) -> ! s.equals("")).filter((s) -> ! s.equals("\n")).filter((s) -> ! s.equals(" "))
+                .collect(Collectors.joining(""));
         return info;
     }
 
     public static String emailWithDomain(String email) {
         String domain = email.substring(email.indexOf('@') + 1, email.length());
-        if (email.equals("")) {
-            return " ";
+        //if (email.equals("") || email.lastIndexOf('@') == email.length()) {
+            if (email.equals("")) {
+            return "";
+        } else if (domain.length() == 0) {
+            return email;
         }
             return email + " (www." + domain + ")";
     }
 
     public static String phoneWithHomePrefix(String phone) {
         if (phone.equals("")) {
-            return " ";
+            return "";
         }
         return "H: " + phone;
     }
 
     public static String phoneWithMobilePrefix(String phone) {
         if (phone.equals("")) {
-            return " ";
+            return "";
         }
         return "M: " + phone;
     }
 
     public static String phoneWithWorkPrefix(String phone) {
         if (phone.equals("")) {
-            return " ";
+            return "";
         }
         return "W: " + phone;
     }

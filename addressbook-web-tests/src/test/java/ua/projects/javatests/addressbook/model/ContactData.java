@@ -1,5 +1,7 @@
 package ua.projects.javatests.addressbook.model;
 
+import java.io.File;
+
 public class ContactData {
     private int id;
     private String firstName;
@@ -17,6 +19,7 @@ public class ContactData {
     private String thirdEmail;
     private String group;
     private String info;
+    private File photo;
 
     public int getId() {
         return id;
@@ -80,6 +83,10 @@ public class ContactData {
 
     public String getInfo() {
         return info;
+    }
+
+    public File getPhoto() {
+        return photo;
     }
 
     public ContactData withId(int id) {
@@ -159,6 +166,11 @@ public class ContactData {
 
     public ContactData withInfo(String info) {
         this.info = info;
+        return this;
+    }
+
+    public ContactData withPhoto(File photo) {
+        this.photo = photo;
         return this;
     }
 
