@@ -17,13 +17,4 @@
     <homePhone>homephone_1</homePhone>
     <firstEmail>email_1</firstEmail>
   </contact>
-  <contact>
-    <firstName>name_2</firstName>
-    <lastName>lastname _2</lastName>
-    <nickname>nickname_2</nickname>
-    <workPlace>workplace_2</workPlace>
-    <address>address_2</address>
-    <homePhone>homephone_2</homePhone>
-    <firstEmail>email_2</firstEmail>
-  </contact>
 </list>
