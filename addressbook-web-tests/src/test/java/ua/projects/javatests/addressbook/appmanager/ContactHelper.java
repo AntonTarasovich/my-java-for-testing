@@ -151,7 +151,7 @@ public class ContactHelper extends HelperBase {
 
     public ContactData detailedInfoForm(ContactData contact) {
         nh.goToDetailedInfoPage(contact.getId());
-        String info = wd.findElement(By.id("content")).getText().replaceAll("\n", "").replaceAll("[\\s]{2,}", " ");
+        String info = wd.findElement(By.id("content")).getText().replaceAll("\n", " ").replaceAll("[\\s]{2,}", " ");
         return contact.withInfo(info);
     }
 

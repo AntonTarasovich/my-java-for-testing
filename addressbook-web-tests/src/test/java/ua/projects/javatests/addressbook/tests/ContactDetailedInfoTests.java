@@ -14,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.testng.Assert;
 
-public class DetailedInfoTest extends TestBase {
+public class ContactDetailedInfoTests extends TestBase {
 
     @BeforeMethod
     public void ensurePreconditions() {
@@ -26,7 +26,7 @@ public class DetailedInfoTest extends TestBase {
     }
 
     @Test
-    public void testDetailedInfo() {
+    public void testContactDetailedInfo() {
         app.goTo().goToHomePage();
         ContactData contact = app.contact().all().iterator().next();
         ContactData contactDetailedInfoForm = app.contact().detailedInfoForm(contact);
@@ -60,19 +60,19 @@ public class DetailedInfoTest extends TestBase {
                 phoneWithHomePrefix(contact.getHomePhone()), phoneWithMobilePrefix(contact.getMobilePhone()), phoneWithWorkPrefix(contact.getWorkPhone()), "",
                 emailWithDomain(contact.getFirstEmail()), emailWithDomain(contact.getSecondEmail()), emailWithDomain(contact.getThirdEmail())).stream()
                 .filter((s) -> ! s.equals("")).filter((s) -> ! s.equals("")).filter((s) -> ! s.equals("\n")).filter((s) -> ! s.equals(" "))
-                .collect(Collectors.joining(""));
+                .collect(Collectors.joining(" "));
         return info;
     }
 
     public static String emailWithDomain(String email) {
         String domain = email.substring(email.indexOf('@') + 1, email.length());
-        //if (email.equals("") || email.lastIndexOf('@') == email.length()) {
-            if (email.equals("")) {
+        if (email.equals("")) {
             return "";
-        } else if (domain.length() == 0) {
-            return email;
         }
+        else if (domain.length() != 0) {
             return email + " (www." + domain + ")";
+        }
+        return email;
     }
 
     public static String phoneWithHomePrefix(String phone) {

@@ -6,7 +6,7 @@
     "workPlace": "workplace_0",
     "address": "address_0",
     "homePhone": "homephone_0",
-    "firstEmail": "email_0"
+    "firstEmail": "email_0@mgid.com"
   },
   {
     "firstName": "name_1",
@@ -15,6 +15,6 @@
     "workPlace": "workplace_1",
     "address": "address_1",
     "homePhone": "homephone_1",
-    "firstEmail": "email_1"
+    "firstEmail": "email_1@mgid.com"
   }
 ]
