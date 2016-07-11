@@ -87,4 +87,11 @@ public class GroupHelper extends HelperBase
         return groups;
     }
 
+    public void deleteAllGroups() {
+        List<WebElement> groupCheckboxes = wd.findElements(By.name("selected[]"));
+        for (WebElement groupCheckbox : groupCheckboxes) {
+            groupCheckbox.click();
+        }
+        click(By.name("delete"));
+    }
 }

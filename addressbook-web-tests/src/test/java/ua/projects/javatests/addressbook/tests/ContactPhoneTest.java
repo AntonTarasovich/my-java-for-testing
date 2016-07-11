@@ -4,6 +4,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ua.projects.javatests.addressbook.model.ContactData;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -14,10 +15,12 @@ public class ContactPhoneTest extends TestBase{
 
     @BeforeMethod
     public void ensurePreconditions() {
-        if (app.contact().all().size() == 0) {
+        if (app.db().contacts().size() == 0) {
+            File photo = new File("src/test/resources/batman.jpg");
             app.contact().create(new ContactData().withFirstName("Anton").withLastName("Tarasovich").withNickname("Hammer").withWorkPlace("MGID")
                     .withAddress("Kiev, Dovzhenko str. 3, app. 21").withHomePhone("111-11-11").withMobilePhone("222-22-22").withWorkPhone("333-33-33")
-                    .withFirstEmail("anton.tarasovich@mgid.com").withSecondEmail("vasya111@mail.ru").withThirdEmail("petya72@meta.ua").withGroup("test1"));
+                    .withFirstEmail("anton.tarasovich@mgid.com").withSecondEmail("vasya111@mail.ru").withThirdEmail("petya72@meta.ua").withGroup("test1")
+                    .withPhoto(photo));
         }
     }
 

@@ -3,36 +3,81 @@ package ua.projects.javatests.addressbook.model;
 import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
 
+@Entity
+@Table (name = "addressbook")
 @XStreamAlias("contact")
 public class ContactData {
+
+    @Id
+    @Column (name = "id")
     @XStreamOmitField
     private int id;
+
+    @Column (name = "firstname")
     @Expose
     private String firstName;
+
+    @Column (name = "lastname")
     @Expose
     private String lastName;
+
     @Expose
     private String nickname;
+
+    @Column (name = "company")
     @Expose
     private String workPlace;
+
     @Expose
+    @Type(type = "text")
     private String address;
+
+    @Column (name = "home")
+    @Type(type = "text")
     @Expose
     private String homePhone;
+
+    @Column (name = "mobile")
+    @Type(type = "text")
     private String mobilePhone;
+
+    @Column (name = "work")
+    @Type(type = "text")
     private String workPhone;
+
+    @Transient
     private String allPhones;
+
+    @Transient
     private String allEmails;
+
+    @Column (name = "email")
+    @Type(type = "text")
     @Expose
     private String firstEmail;
+
+    @Column (name = "email2")
+    @Type(type = "text")
     private String secondEmail;
+
+    @Column (name = "email3")
+    @Type(type = "text")
     private String thirdEmail;
+
+    @Transient
     private String group;
+
+    @Transient
     private String info;
-    private File photo;
+
+    @Column (name = "photo")
+    @Type(type = "text")
+    private String photo = "src/test/resources/batman.jpg";
 
     public int getId() {
         return id;
@@ -99,7 +144,7 @@ public class ContactData {
     }
 
     public File getPhoto() {
-        return photo;
+        return new File(photo);
     }
 
     public ContactData withId(int id) {
@@ -183,7 +228,7 @@ public class ContactData {
     }
 
     public ContactData withPhoto(File photo) {
-        this.photo = photo;
+        this.photo = photo.getPath();
         return this;
     }
 
@@ -196,7 +241,12 @@ public class ContactData {
 
         if (id != that.id) return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-        return lastName != null ? lastName.equals(that.lastName) : that.lastName == null;
+        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
+        if (nickname != null ? !nickname.equals(that.nickname) : that.nickname != null) return false;
+        if (workPlace != null ? !workPlace.equals(that.workPlace) : that.workPlace != null) return false;
+        if (address != null ? !address.equals(that.address) : that.address != null) return false;
+        if (homePhone != null ? !homePhone.equals(that.homePhone) : that.homePhone != null) return false;
+        return firstEmail != null ? firstEmail.equals(that.firstEmail) : that.firstEmail == null;
 
     }
 
@@ -205,16 +255,25 @@ public class ContactData {
         int result = id;
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
+        result = 31 * result + (workPlace != null ? workPlace.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (homePhone != null ? homePhone.hashCode() : 0);
+        result = 31 * result + (firstEmail != null ? firstEmail.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "ContactData{" +
-                "id=" + id +
-
-                ", firstName='" + firstName + '\'' +
+                "firstName='" + firstName + '\'' +
+                ", id=" + id +
                 ", lastName='" + lastName + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", workPlace='" + workPlace + '\'' +
+                ", address='" + address + '\'' +
+                ", homePhone='" + homePhone + '\'' +
+                ", firstEmail='" + firstEmail + '\'' +
                 '}';
     }
 
