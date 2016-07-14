@@ -11,3 +11,8 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+sandbox/src/main/java/ua/projects/javatests/sandbox/Script.java
+sandbox/src/main/resources/access.log
+sandbox/src/main/parsed_log.txt
+sandbox/src/main/resources/parsed_log.txt
+sandbox/src/main/resources/parsed_log.txt

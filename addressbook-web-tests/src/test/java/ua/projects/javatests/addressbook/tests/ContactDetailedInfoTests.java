@@ -22,8 +22,7 @@ public class ContactDetailedInfoTests extends TestBase {
             File photo = new File("src/test/resources/batman.jpg");
             app.contact().create(new ContactData().withFirstName("Anton").withLastName("Tarasovich").withNickname("Hammer").withWorkPlace("MGID")
                     .withAddress("Kiev, Dovzhenko str. 3, app. 21").withHomePhone("111-11-11").withMobilePhone("222-22-22").withWorkPhone("333-33-33")
-                    .withFirstEmail("anton.tarasovich@mgid.com").withSecondEmail("vasya111@mail.ru").withThirdEmail("petya72@meta.ua").withGroup("test1")
-                    .withPhoto(photo));
+                    .withFirstEmail("anton.tarasovich@mgid.com").withSecondEmail("vasya111@mail.ru").withThirdEmail("petya72@meta.ua").withPhoto(photo));
         }
     }
 
@@ -37,6 +36,7 @@ public class ContactDetailedInfoTests extends TestBase {
         app.goTo().goToHomePage();
 
         assertThat(contactDetailedInfoForm.getInfo(), equalTo(mergeInfo(contactInfoFromEditForm)));
+        verifyContactListInUI();
     }
 
     @Test
@@ -55,6 +55,7 @@ public class ContactDetailedInfoTests extends TestBase {
         Contacts after = app.db().contacts();
 
         assertThat(after, equalTo(before));
+        verifyContactListInUI();
     }
 
     public static String mergeInfo(ContactData contact) {

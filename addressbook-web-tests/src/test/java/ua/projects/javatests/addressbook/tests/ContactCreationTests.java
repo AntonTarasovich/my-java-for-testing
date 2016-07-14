@@ -3,11 +3,13 @@ package ua.projects.javatests.addressbook.tests;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.xstream.XStream;
+import org.openqa.selenium.By;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ua.projects.javatests.addressbook.model.ContactData;
 import ua.projects.javatests.addressbook.model.Contacts;
 import ua.projects.javatests.addressbook.model.GroupData;
+import ua.projects.javatests.addressbook.model.Groups;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -53,20 +55,22 @@ public class ContactCreationTests extends TestBase {
         }
     }
     
-    @Test (priority = 1, dataProvider = "validContactsFromJson")
-    public void testContactCreation(ContactData contact) {
+    @Test (priority = 1)
+    public void testContactCreation() {
+        Groups groups = app.db().groups();
+        File photo = new File("src/test/resources/batman.jpg");
+        ContactData newContact = new ContactData().withFirstName("Anton").withLastName("Tarasovich").withNickname("Hammer").withWorkPlace("MGID")
+                .withAddress("Kiev, Dovzhenko str. 3, app. 21").withHomePhone("111-11-11").withMobilePhone("222-22-22").withWorkPhone("333-33-33")
+                .withFirstEmail("anton.tarasovich@mgid.com").withSecondEmail("vasya111@mail.ru").withThirdEmail("petya72@meta.ua").withPhoto(photo)
+                .inGroup(groups.iterator().next());
         app.goTo().goToHomePage();
         Contacts before = app.db().contacts();
-        /*File photo = new File("src/test/resources/batman.jpg");
-        ContactData contact = new ContactData().withFirstName("Anton").withLastName("Tarasovich").withNickname("Hammer").withWorkPlace("MGID")
-                .withAddress("Kiev, Dovzhenko str. 3, app. 21").withHomePhone("111-11-11").withMobilePhone("222-22-22").withWorkPhone("333-33-33")
-                .withFirstEmail("anton.tarasovich@mgid.com").withSecondEmail("vasya111@mail.ru").withThirdEmail("petya72@meta.ua").withGroup("test1")
-                .withPhoto(photo);*/
-        app.contact().create(contact);
+        app.contact().create(newContact);
         assertThat(app.contact().count(), equalTo(before.size() + 1));
         Contacts after = app.db().contacts();
 
-        assertThat(after, equalTo(before.withAdded(contact.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
+        assertThat(after, equalTo(before.withAdded(newContact.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
+        verifyContactListInUI();
     }
 
     @Test (priority = 2)

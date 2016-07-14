@@ -59,8 +59,6 @@ public class ContactHelper extends HelperBase {
                     type(By.name("email3"), contactData.getThirdEmail());
                     attach(By.name("photo"), contactData.getPhoto());
                 }
-                System.out.println(contactData.getFirstName());
-                System.out.println(contactData.getGroup());
                 new Select(wd.findElement(By.name("new_group"))).selectByVisibleText("test1");
             } else {
                 Assert.assertFalse(isElementPresent(By.name("new_group")));
@@ -169,5 +167,19 @@ public class ContactHelper extends HelperBase {
     public void deleteAllContacts() {
         click(By.cssSelector("#MassCB"));
         deleteSelectedContact();
+    }
+
+    public void insert(ContactData contact) {
+        selectContactById(contact.getId());
+        new Select(wd.findElement(By.name("to_group"))).selectByVisibleText("test1");
+        /*while (! isElementPresent(By.name("remove")))
+                if (isElementPresent(By.tagName("input"))) {
+                    group.click();
+                }
+                int id = Integer.parseInt(row.findElement(By.tagName("input")).getAttribute("value"));
+            }
+        }
+        selectContactById(contact.getId());
+    }*/
     }
 }
