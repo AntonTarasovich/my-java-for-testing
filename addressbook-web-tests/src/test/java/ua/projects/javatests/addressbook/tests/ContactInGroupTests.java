@@ -4,7 +4,6 @@ package ua.projects.javatests.addressbook.tests;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ua.projects.javatests.addressbook.model.ContactData;
-import ua.projects.javatests.addressbook.model.Contacts;
 import ua.projects.javatests.addressbook.model.GroupData;
 import ua.projects.javatests.addressbook.model.Groups;
 
