@@ -7,7 +7,6 @@ repositories {
 
 test {
     useTestNG()
-    return true
 }
 
 dependencies {

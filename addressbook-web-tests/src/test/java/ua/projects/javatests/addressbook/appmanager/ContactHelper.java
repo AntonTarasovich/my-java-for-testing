@@ -3,13 +3,19 @@ package ua.projects.javatests.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 import ua.projects.javatests.addressbook.model.ContactData;
 import ua.projects.javatests.addressbook.model.Contacts;
 import ua.projects.javatests.addressbook.model.GroupData;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.testng.Assert.*;
 
 public class ContactHelper extends HelperBase {
 
@@ -36,33 +42,47 @@ public class ContactHelper extends HelperBase {
         type(By.name("email2"), contactData.getSecondEmail());
         type(By.name("email3"), contactData.getThirdEmail());
         attach(By.name("photo"), contactData.getPhoto());
-            if (creation) {
-                click(By.name("new_group"));
+        if (creation) {
+            if (contactData.getGroups().size() > 0) {
+                return;
+                /*click(By.name("new_group"));
                     if (wd.findElements(By.cssSelector("select[name=new_group] option")).size() > 1) {
-                    return;
-                } else {
-                    GroupHelper gh = new GroupHelper(wd);
-                    NavigationHelper nh = new NavigationHelper(wd);
-                    nh.groupPage();
-                    gh.create(new GroupData().withName("test1"));
-                    click(By.linkText("add new"));
-                    type(By.name("firstname"), contactData.getFirstName());
-                    type(By.name("lastname"), contactData.getLastName());
-                    type(By.name("nickname"), contactData.getNickname());
-                    type(By.name("company"), contactData.getWorkPlace());
-                    type(By.name("address"), contactData.getAddress());
-                    type(By.name("home"), contactData.getHomePhone());
-                    type(By.name("mobile"), contactData.getMobilePhone());
-                    type(By.name("work"), contactData.getWorkPhone());
-                    type(By.name("email"), contactData.getFirstEmail());
-                    type(By.name("email2"), contactData.getSecondEmail());
-                    type(By.name("email3"), contactData.getThirdEmail());
-                    attach(By.name("photo"), contactData.getPhoto());
-                }
-                new Select(wd.findElement(By.name("new_group"))).selectByVisibleText("test1");
+                    return;*/
             } else {
-                Assert.assertFalse(isElementPresent(By.name("new_group")));
+                GroupHelper gh = new GroupHelper(wd);
+                NavigationHelper nh = new NavigationHelper(wd);
+                nh.groupPage();
+                gh.create(new GroupData().withName("test1"));
+                click(By.linkText("add new"));
+                type(By.name("firstname"), contactData.getFirstName());
+                type(By.name("lastname"), contactData.getLastName());
+                type(By.name("nickname"), contactData.getNickname());
+                type(By.name("company"), contactData.getWorkPlace());
+                type(By.name("address"), contactData.getAddress());
+                type(By.name("home"), contactData.getHomePhone());
+                type(By.name("mobile"), contactData.getMobilePhone());
+                type(By.name("work"), contactData.getWorkPhone());
+                type(By.name("email"), contactData.getFirstEmail());
+                type(By.name("email2"), contactData.getSecondEmail());
+                type(By.name("email3"), contactData.getThirdEmail());
+                attach(By.name("photo"), contactData.getPhoto());
             }
+            new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroups().iterator().next().getName());
+        } else {
+            assertFalse(isElementPresent(By.name("new_group")));
+        }
+    }
+
+    public GroupData createNewGroupForContact() {
+        GroupHelper gh = new GroupHelper(wd);
+        NavigationHelper nh = new NavigationHelper(wd);
+        nh.groupPage();
+        long now = System.currentTimeMillis();
+        String name = String.format("%s", now);
+        GroupData group = new GroupData().withName("test" + name);
+        gh.create(group);
+        nh.goToHomePage();
+        return group;
     }
 
     public void newContactCreation() {
@@ -118,7 +138,7 @@ public class ContactHelper extends HelperBase {
         Contacts contacts = new Contacts();
         List<WebElement> rows = wd.findElements(By.name("entry"));
         for (WebElement row : rows) {
-            List <WebElement> cells = row.findElements(By.tagName("td"));
+            List<WebElement> cells = row.findElements(By.tagName("td"));
             String firstName = cells.get(2).getText();
             String lastName = cells.get(1).getText();
             String address = cells.get(3).getText();
@@ -126,7 +146,7 @@ public class ContactHelper extends HelperBase {
             String allEmails = cells.get(4).getText();
             int id = Integer.parseInt(row.findElement(By.tagName("input")).getAttribute("value"));
             contacts.add(new ContactData().withId(id).withFirstName(firstName).withLastName(lastName).withAddress(address)
-            .withAllPhones(allPhones).withAllEmails(allEmails));
+                    .withAllPhones(allPhones).withAllEmails(allEmails));
         }
         return contacts;
     }
@@ -169,17 +189,27 @@ public class ContactHelper extends HelperBase {
         deleteSelectedContact();
     }
 
-    public void insert(ContactData contact) {
-        selectContactById(contact.getId());
-        new Select(wd.findElement(By.name("to_group"))).selectByVisibleText("test1");
-        /*while (! isElementPresent(By.name("remove")))
-                if (isElementPresent(By.tagName("input"))) {
-                    group.click();
-                }
-                int id = Integer.parseInt(row.findElement(By.tagName("input")).getAttribute("value"));
-            }
-        }
-        selectContactById(contact.getId());
-    }*/
+    public void addSelectedContactToGroup(String groupName) {
+        new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(groupName);
+        click(By.name("add"));
     }
+
+    public List<String> contactGroupsFromUi() {
+        List<WebElement> contacts = new Select(wd.findElement(By.name("to_group"))).getOptions();
+        List<String> newContacts = new ArrayList<String>();
+        for (WebElement contact : contacts) {
+            newContacts.add(contact.getText());
+        }
+        return newContacts;
+    }
+
+    public int getContactId() {
+        int id = 0;
+        if (wd.findElement(By.cssSelector("td[class='center']")).isDisplayed()) {
+            id = Integer.parseInt(wd.findElement(By.xpath(".//*[@id='maintable']//td[1]/input[1]")).getAttribute("id"));
+            selectContactById(id);
+        }
+        return id;
+    }
+
 }

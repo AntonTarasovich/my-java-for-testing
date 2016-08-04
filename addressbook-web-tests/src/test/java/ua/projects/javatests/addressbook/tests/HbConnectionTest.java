@@ -8,6 +8,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.testng.annotations.*;
 import ua.projects.javatests.addressbook.model.ContactData;
 import ua.projects.javatests.addressbook.model.GroupData;
+import ua.projects.javatests.addressbook.model.Groups;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class HbConnectionTest {
             StandardServiceRegistryBuilder.destroy( registry );
         }
     }
+
     @Test
     public void testHbConnection() {
         Session session = sessionFactory.openSession();
@@ -43,4 +45,16 @@ public class HbConnectionTest {
         session.getTransaction().commit();
         session.close();
     }
+
+    public void groups() {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        List<Integer> result = session.createQuery("select id from GroupData").list();
+        for (Integer group : result) {
+            System.out.println(group);
+        }
+        session.getTransaction().commit();
+        session.close();
+    }
+
 }

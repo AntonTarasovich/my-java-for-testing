@@ -13,6 +13,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.testng.Assert;
+import ua.projects.javatests.addressbook.model.Groups;
 
 public class ContactDetailedInfoTests extends TestBase {
 
@@ -41,8 +42,9 @@ public class ContactDetailedInfoTests extends TestBase {
 
     @Test
     public void testPhotoInDetailedInfo() {
+        Groups groups = app.db().groups();
         File photo = new File("src/test/resources/batman.jpg");
-        ContactData contact = new ContactData().withFirstName("Anton").withPhoto(photo);
+        ContactData contact = new ContactData().withFirstName("Anton").withPhoto(photo).inGroup(groups.iterator().next());
         app.goTo().goToHomePage();
         Contacts before = app.db().contacts();
         app.contact().create(contact);

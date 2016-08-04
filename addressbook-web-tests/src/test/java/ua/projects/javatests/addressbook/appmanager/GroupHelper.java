@@ -3,6 +3,7 @@ package ua.projects.javatests.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 import ua.projects.javatests.addressbook.model.GroupData;
 import ua.projects.javatests.addressbook.model.Groups;
 
@@ -87,11 +88,24 @@ public class GroupHelper extends HelperBase
         return groups;
     }
 
+    public void selectAllGroups() {
+        new Select(wd.findElement(By.name("group"))).selectByVisibleText("[all]");
+    }
+
+
     public void deleteAllGroups() {
         List<WebElement> groupCheckboxes = wd.findElements(By.name("selected[]"));
         for (WebElement groupCheckbox : groupCheckboxes) {
             groupCheckbox.click();
         }
         click(By.name("delete"));
+    }
+
+    public void selectGroupWithContact(String groupName) {
+        new Select(wd.findElement(By.name("group"))).selectByVisibleText(groupName);
+    }
+
+    public void removeFromGroup() {
+        click(By.name("remove"));
     }
 }

@@ -3,12 +3,10 @@ package ua.projects.javatests.addressbook.tests;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.xstream.XStream;
-import org.openqa.selenium.By;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ua.projects.javatests.addressbook.model.ContactData;
 import ua.projects.javatests.addressbook.model.Contacts;
-import ua.projects.javatests.addressbook.model.GroupData;
 import ua.projects.javatests.addressbook.model.Groups;
 
 import java.io.BufferedReader;
@@ -57,6 +55,9 @@ public class ContactCreationTests extends TestBase {
     
     @Test (priority = 1)
     public void testContactCreation() {
+        if  (app.db().groups().size() == 0) {
+            app.contact().createNewGroupForContact();
+        }
         Groups groups = app.db().groups();
         File photo = new File("src/test/resources/batman.jpg");
         ContactData newContact = new ContactData().withFirstName("Anton").withLastName("Tarasovich").withNickname("Hammer").withWorkPlace("MGID")
@@ -75,9 +76,10 @@ public class ContactCreationTests extends TestBase {
 
     @Test (priority = 2)
     public void testBadContactCreation() {
+        Groups groups = app.db().groups();
         app.goTo().goToHomePage();
         Contacts before = app.db().contacts();
-        ContactData contact = new ContactData().withFirstName("Anton'");
+        ContactData contact = new ContactData().withFirstName("Anton'").inGroup(groups.iterator().next());
         app.contact().create(contact);
         assertThat(app.contact().count(), equalTo(before.size()));
         Contacts after = app.db().contacts();
